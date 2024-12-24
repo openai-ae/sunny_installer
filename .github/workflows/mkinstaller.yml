@@ -1,0 +1,57 @@
+name: Build SunnyOS System Installer
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to build'
+        required: true
+        default: 'master'
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Use /mnt for Temporary Storage
+        run: |
+          sudo mkdir -p /mnt/temp
+          sudo chmod 777 /mnt/temp
+
+      - name: Build SunnyOS System Installer
+        run: |
+          docker run --rm --privileged \
+            -v "$GITHUB_WORKSPACE:/work" \
+            -v "/mnt/temp:/tmp" \
+            archlinux:latest /bin/bash -c "
+              makepkg              
+            "
+
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: 'v1.0.0'
+          release_name: 'SunnyOS System Installer'
+          draft: false
+          prerelease: false
+
+      - name: Upload to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /mnt/temp/out/*.zst
+          asset_name: calamares.tar.zst
+          asset_content_type: application/octet-stream
