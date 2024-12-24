@@ -32,7 +32,7 @@ jobs:
             archlinux:latest /bin/bash -c "
               useradd -m -s /bin/bash builder && \
               chown -R builder:builder /work && \
-              pacman -Sy --noconfirm base-devel && \
+              pacman -Sy --noconfirm base-devel ckbcomp efibootmgr gtk-update-icon-cache hwinfo kpmcore libpwquality mkinitcpio-openswap squashfs-tools yaml-cpp extra-cmake-modules git && \
               su builder -c 'cd /work && makepkg -s'
             "
 
