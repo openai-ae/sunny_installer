@@ -30,7 +30,7 @@ jobs:
           docker run --rm \
             -v "$GITHUB_WORKSPACE:/work" \
             -v "/mnt/temp:/tmp" \
-            archlinux:latest /bin/bash "
+            archlinux:latest /bin/bash -c "
               makepkg              
             "
 
