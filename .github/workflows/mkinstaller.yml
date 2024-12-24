@@ -33,7 +33,7 @@ jobs:
               useradd -m -s /bin/bash builder && \
               chown -R builder:builder /work && \
               pacman -Sy --noconfirm base-devel && \
-              su builder -c 'cd /work && makepkg'
+              su builder -c 'cd /work && makepkg -s'
             "
 
       - name: Create Release
