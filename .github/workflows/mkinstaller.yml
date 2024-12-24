@@ -27,7 +27,7 @@ jobs:
 
       - name: Build SunnyOS System Installer
         run: |
-          docker run --rm --privileged \
+          docker run --rm \
             -v "$GITHUB_WORKSPACE:/work" \
             -v "/mnt/temp:/tmp" \
             archlinux:latest /bin/bash -c "
