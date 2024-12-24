@@ -8,7 +8,6 @@ on:
         required: true
         default: 'master'
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -27,13 +26,14 @@ jobs:
 
       - name: Build SunnyOS System Installer
         run: |
-          docker run --rm \
+          docker run --rm --privileged \
             -v "$GITHUB_WORKSPACE:/work" \
             -v "/mnt/temp:/tmp" \
             archlinux:latest /bin/bash -c "
-              makepkg              
+              useradd -m -s /bin/bash builder && \
+              chown -R builder:builder /work && \
+              su builder -c 'cd /work && makepkg'
             "
-
 
       - name: Create Release
         id: create_release
