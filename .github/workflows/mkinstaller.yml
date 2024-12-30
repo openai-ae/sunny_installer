@@ -33,7 +33,7 @@ jobs:
               useradd -m -s /bin/bash builder && \
               chown -R builder:builder /work && \
               pacman -Sy --noconfirm base-devel ckbcomp efibootmgr gtk-update-icon-cache hwinfo kpmcore libpwquality mkinitcpio-openswap squashfs-tools yaml-cpp extra-cmake-modules git && \
-              su builder -c 'cd /work && makepkg -s'
+              su builder -c 'cd /work && git clone https://aur.archlinux.org/mkinitcpio-openswap.git m && cd m && makepkg -si && cd .. && rm -rf m && git clone https://aur.archlinux.org/ckbcomp.git c && cd c && makepkg -si && cd .. && rm -rf c && makepkg -s'
             "
 
       - name: Create Release
